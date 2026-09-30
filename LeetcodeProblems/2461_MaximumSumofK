@@ -1,0 +1,30 @@
+import java.util.HashSet;
+import java.util.Set;
+
+class Solution {
+    public long maximumSubarraySum(int[] nums, int k) {
+        long maxSum = 0, sum = 0;
+        Set<Integer> set = new HashSet<>();
+        
+        for (int left = 0, right = 0; right < nums.length; right++) {
+            // Remove duplicates by moving the left pointer
+            while (set.contains(nums[right])) {
+                set.remove(nums[left]);
+                sum -= nums[left++];
+            }
+            
+            // Add rightmost element
+            set.add(nums[right]);
+            sum += nums[right];
+            
+            // Check max sum when window size reaches k
+            if (right - left + 1 == k) {
+                maxSum = Math.max(maxSum, sum);
+                set.remove(nums[left]);
+                sum -= nums[left++];
+            }
+        }
+        
+        return maxSum;
+    }
+}
